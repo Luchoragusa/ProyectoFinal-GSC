@@ -1,7 +1,24 @@
+using WebApplicationAPI.DataAccess;
+using Microsoft.EntityFrameworkCore;
+using Entities;
+using WebApplicationAPI.DataAccess.Thing;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+
+
+builder.Services.AddAuthorization();
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+builder.Services.AddDbContext<WebApplicationAPIContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("ThingsContextConnection"));
+});
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 var app = builder.Build();
 
@@ -21,5 +38,8 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapRazorPages();
+app.MapControllerRoute(
+       name: "default",
+       pattern: "{controller}/{action=Index}/{id?}");
 
 app.Run();
