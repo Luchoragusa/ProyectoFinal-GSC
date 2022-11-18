@@ -1,6 +1,6 @@
 ﻿using Entities;
 
-namespace WebApplicationAPI.DataAccess.Thing
+namespace WebApplicationAPI.DataAccess.PersonF
 {
     public class PersonRepository : GenericRepository<Person>, IPersonRepository
     {

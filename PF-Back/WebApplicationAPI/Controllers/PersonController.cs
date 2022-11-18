@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebApplicationAPI.DataAccess;
 using Entities;
-using WebApplicationAPI.DataAccess.Thing;
 
 namespace WebApplicationAPI.Controllers
 {
@@ -15,25 +14,63 @@ namespace WebApplicationAPI.Controllers
             this.uow = uow;
         }
 
-        [HttpGet] // GETAll api/person
+        [HttpGet] // GetAll api/person
         public IActionResult GetAll()
         {
             return Ok(uow.PersonRepository.GetAll()); // Esto va a llamar del generic repository al getAll de ahi
         }
-        
+
+        [HttpGet("{id}")] // GetOne api/person/{id}
+        public IActionResult GetOne(int id)
+        {
+            Console.WriteLine("GetOne " + id);
+
+            if (id == 0)
+                return BadRequest("ID is mandatory, must be an integer and must be greater than 0");
+
+            Person person = uow.PersonRepository.GetById(id);
+            if (person == null)
+                return NotFound();
+            
+            return Ok(person);
+        }
+
         [HttpPost] // POST api/person
         public IActionResult Create([FromBody] Person person)
         {
             //Validaciones de request
-            if (person is null
-               || string.IsNullOrWhiteSpace(person.Name))
-                return BadRequest("Description is mandatory");
+            if (person is null)
+                return BadRequest("Body is empty");
+            
+            if (string.IsNullOrWhiteSpace(person.Name))
+                return BadRequest("Name is mandatory");
+            if (string.IsNullOrWhiteSpace(person.Email))
+                return BadRequest("Email is mandatory");
+            if (string.IsNullOrWhiteSpace(person.Phone))
+                return BadRequest("Phone is mandatory");
 
-            var a = uow.PersonRepository.Insert(person);
+            var p_created = uow.PersonRepository.Insert(person);
 
-            //Todo salio bien, es un POST, asi que vamos a devolver CREATED
-            return Created($"/categories/{a.Id}", a);
-            //Ver en POSTMAN que el response tiene un header "Location"
+            if (p_created == null)
+                return BadRequest("Error creating person");
+
+            uow.Complete(); // Esto va a llamar del generic repository al saveChanges de ahi
+            
+            return Created($"/categories/{p_created.Id}", p_created); // no me deja devolver el string
+        }
+
+        [HttpDelete("{id}")] // Delete api/person/{id}
+        public IActionResult Delete(int id)
+        {
+            if (id == 0)
+                return BadRequest("ID is mandatory, must be an integer and must be greater than 0");
+
+            bool deleted = uow.PersonRepository.Delete(id);
+            if (!deleted)
+                return NotFound();
+            
+            uow.Complete();
+            return Ok();
         }
     }
 }

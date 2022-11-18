@@ -1,7 +1,8 @@
 using WebApplicationAPI.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Entities;
-using WebApplicationAPI.DataAccess.Thing;
+using WebApplicationAPI.DataAccess.PersonF;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,12 @@ builder.Services.AddDbContext<WebApplicationAPIContext>(options =>
 });
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+// Esto es para lo del foreach del getAll loans que hace la busqueda
+
+builder.Services.AddControllers().AddJsonOptions(x =>
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+
 
 var app = builder.Build();
 

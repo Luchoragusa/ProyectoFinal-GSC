@@ -1,4 +1,5 @@
-﻿using WebApplicationAPI.DataAccess.Thing;
+﻿using WebApplicationAPI.DataAccess.LoanF;
+using WebApplicationAPI.DataAccess.PersonF;
 
 namespace WebApplicationAPI.DataAccess
 {
@@ -9,9 +10,11 @@ namespace WebApplicationAPI.DataAccess
         {
             _context = context;
             PersonRepository = new PersonRepository(_context);
+            LoanRepository = new LoanRepository(_context);
         }
         
-        public PersonRepository PersonRepository { get; } 
+        public PersonRepository PersonRepository { get; }
+        public LoanRepository LoanRepository { get; }
         public int Complete()
         {
             return _context.SaveChanges();
