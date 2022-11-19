@@ -101,11 +101,22 @@ namespace WebApplicationAPI.Controllers
             if (id == 0)
                 return BadRequest("ID is mandatory, must be an integer and must be greater than 0");
 
-            if (!uow.PersonRepository.Delete(id))
+            Person p = uow.PersonRepository.GetById(id);
+            if (p == null)
                 return NotFound();
             
-            uow.Complete();
-            return Ok();
+            List<Loan> loans = uow.LoanRepository.GetLoansForPerson(p);
+
+            if (loans.Count > 0)
+                return BadRequest($"This person has {loans.Count} loans, it cannot be deleted",);
+
+            if (uow.PersonRepository.Delete(id))
+            {
+                uow.Complete();
+                return Ok();
+            }
+            else
+                return BadRequest("Error deleting person");
         }
     }
 }

@@ -8,11 +8,6 @@ namespace WebApplicationAPI.DataAccess.PersonF
         {
         }
 
-        public List<Loan> GetAllLoans()
-        {
-            throw new NotImplementedException();
-        }
-
         //bool Login(Person person)
         //{
         //    return true;

@@ -7,15 +7,10 @@ namespace WebApplicationAPI.DataAccess.LoanF
         public LoanRepository(WebApplicationAPIContext context) : base(context)
         {
         }
-
-        public List<Thing> GetAllThings()
+        public List<Loan> GetLoansForPerson(Person person)
         {
-            throw new NotImplementedException();
-        }
-
-        public List<Person> GetAllPerson()
-        {
-            throw new NotImplementedException();
+            List<Loan> loans = dbSet.Where(l => l.PersonId == person.Id).ToList();
+            return loans;
         }
         public bool SetReturnDate(Loan loan) // Ver como hacer para que solo actualice la fecha
         {

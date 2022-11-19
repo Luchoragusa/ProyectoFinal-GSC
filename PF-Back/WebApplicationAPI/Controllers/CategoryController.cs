@@ -95,6 +95,8 @@ namespace WebApplicationAPI.Controllers
             if (id == 0)
                 return BadRequest("ID is mandatory, must be an integer and must be greater than 0");
 
+            // Check the Things that have this category and delete them or change the category
+
             if (!uow.CategoryRepository.Delete(id))
                 return NotFound();
 
