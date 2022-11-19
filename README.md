@@ -9,4 +9,4 @@
   - Proyecto de UnitTests que pruebe un controller (puede ser del proyecto de MVC o del proyecto de WebAPI).
   - Del lado del frontend (Angular), armar una página de Login, que me permita acceder al sistema (Llamando a las APIs de Autenticacion). Una vez ingresado vamos a poder acceder a un ABM de personas la cual debe estar segurizada usando JWT.
 
-![alt text](https://prnt.sc/e2m-dupuFGJe)
+![My Remote Image](https://prnt.sc/e2m-dupuFGJe)
