@@ -12,5 +12,10 @@ namespace WebApplicationAPI.DataAccess.PersonF
         {
             throw new NotImplementedException();
         }
+
+        //bool Login(Person person)
+        //{
+        //    return true;
+        //}
     }
 }
