@@ -6,5 +6,6 @@ namespace WebApplicationAPI.DataAccess.LoanF
     {
         List<Thing> GetAllThings();
         List<Person> GetAllPerson();
+        bool SetReturnDate(Loan loan);
     }
 }

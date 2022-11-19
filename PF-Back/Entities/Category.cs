@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Entities
 {
+    [Table("Categories")]
     public class Category : EntityBase
     {
         public string Description { get; set; }
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        public DateTime CreationDate { get; set; }
+        public DateTime? CreationDate { get; set; }
         public IList<Thing> Things { get; set; }
     }
 }

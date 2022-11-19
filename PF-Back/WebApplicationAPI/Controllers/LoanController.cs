@@ -45,30 +45,38 @@ namespace WebApplicationAPI.Controllers
                 return null;
             return person;
         }
+        
+        [HttpPost] // POST api/loan
+        public IActionResult Create([FromBody] Loan loan)
+        {
+            //Request validations
+            if (loan is null)
+                return BadRequest("Body is empty");
+            if (loan.PersonId == 0)
+                return BadRequest("Person Id is mandatory");
+            if (loan.ThingId == 0)
+                return BadRequest("Thing Id is mandatory");
 
-        //[HttpPost] // POST api/person
-        //public IActionResult Create([FromBody] Person person)
-        //{
-        //    Validaciones de request
-        //    if (person is null)
-        //        return BadRequest("Body is empty");
+            if (uow.PersonRepository.GetById(loan.PersonId) == null)
+                return NotFound("Person not exist");
 
-        //    if (string.IsNullOrWhiteSpace(person.Name))
-        //        return BadRequest("Name is mandatory");
-        //    if (string.IsNullOrWhiteSpace(person.Email))
-        //        return BadRequest("Email is mandatory");
-        //    if (string.IsNullOrWhiteSpace(person.Phone))
-        //        return BadRequest("Phone is mandatory");
+            // ThingRepository not implemented
 
-        //    var p_created = uow.PersonRepository.Insert(person);
+            //if (uow.ThingRepository.GetById(loan.ThingId) == null)
+            //    return NotFound("Thing not exist");
 
-        //    if (p_created == null)
-        //        return BadRequest("Error creating person");
+            loan.LoanDate = DateTime.Now;
+            loan.ReturnDate = null;
 
-        //    uow.Complete(); // Esto va a llamar del generic repository al saveChanges de ahi
+            Loan l_created = uow.LoanRepository.Insert(loan);
 
-        //    return Created($"/categories/{p_created.Id}", p_created); // no me deja devolver el string
-        //}
+            if (l_created == null)
+                return BadRequest("Error creating loan");
+
+            uow.Complete();
+
+            return Created($"/loans/{l_created.Id}", l_created); // no me deja devolver el string
+        }
 
         [HttpDelete("{id}")] // Delete api/loan/{id}
         public IActionResult Delete(int id)
@@ -76,12 +84,44 @@ namespace WebApplicationAPI.Controllers
             if (id == 0)
                 return BadRequest("ID is mandatory, must be an integer and must be greater than 0");
 
-            bool deleted = uow.LoanRepository.Delete(id);
-            if (!deleted)
+            if (!uow.LoanRepository.Delete(id))
                 return NotFound();
 
             uow.Complete();
             return Ok();
+        }
+
+        [HttpPut("{id}/setreturndate")] // SetReturnDate api/loan/{id}/setreturndate
+        public IActionResult SetReturnDate(int id, [FromBody] Loan loan)
+        {
+            if (id == 0)
+                return BadRequest("ID is mandatory, must be an integer and must be greater than 0");
+
+            if (loan is null)
+                return BadRequest("Body is empty");
+
+            if (loan.ReturnDate == null)
+                return BadRequest("Return Date is mandatory");
+
+            Loan l = uow.LoanRepository.GetById(id);
+
+            if (l == null)
+                return NotFound();
+
+            Console.WriteLine(loan.ReturnDate);
+
+            if (l.LoanDate >= loan.ReturnDate)
+                return BadRequest("Return Date must be greater than Loan Date");
+
+            l.ReturnDate = loan.ReturnDate;
+
+            if(uow.LoanRepository.SetReturnDate(l))
+            {
+                uow.Complete();
+                return Ok();
+            }
+            else
+                return BadRequest("Error setting return date");
         }
     }
 }

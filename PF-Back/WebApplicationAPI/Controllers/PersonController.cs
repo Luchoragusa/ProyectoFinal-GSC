@@ -23,8 +23,6 @@ namespace WebApplicationAPI.Controllers
         [HttpGet("{id}")] // GetOne api/person/{id}
         public IActionResult GetOne(int id)
         {
-            Console.WriteLine("GetOne " + id);
-
             if (id == 0)
                 return BadRequest("ID is mandatory, must be an integer and must be greater than 0");
 
@@ -38,7 +36,7 @@ namespace WebApplicationAPI.Controllers
         [HttpPost] // POST api/person
         public IActionResult Create([FromBody] Person person)
         {
-            //Validaciones de request
+            //Request validations
             if (person is null)
                 return BadRequest("Body is empty");
             
@@ -54,9 +52,9 @@ namespace WebApplicationAPI.Controllers
             if (p_created == null)
                 return BadRequest("Error creating person");
 
-            uow.Complete(); // Esto va a llamar del generic repository al saveChanges de ahi
+            uow.Complete();
             
-            return Created($"/categories/{p_created.Id}", p_created); // no me deja devolver el string
+            return Created($"/person/{p_created.Id}", p_created); // no me deja devolver el string
         }
 
         [HttpDelete("{id}")] // Delete api/person/{id}
@@ -65,8 +63,7 @@ namespace WebApplicationAPI.Controllers
             if (id == 0)
                 return BadRequest("ID is mandatory, must be an integer and must be greater than 0");
 
-            bool deleted = uow.PersonRepository.Delete(id);
-            if (!deleted)
+            if (!uow.PersonRepository.Delete(id))
                 return NotFound();
             
             uow.Complete();

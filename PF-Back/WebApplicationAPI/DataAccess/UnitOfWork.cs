@@ -1,4 +1,6 @@
-﻿using WebApplicationAPI.DataAccess.LoanF;
+﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore;
+using WebApplicationAPI.DataAccess.LoanF;
 using WebApplicationAPI.DataAccess.PersonF;
 
 namespace WebApplicationAPI.DataAccess

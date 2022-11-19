@@ -3,13 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Entities
 {
+    [Table("Loans")]
     public class Loan : EntityBase
     {
-        public DateTime LoanDate { get; set; }
-        public DateTime ReturnDate { get; set; }
+        public DateTime? LoanDate { get; set; }
+        [AllowNull]
+        public DateTime?  ReturnDate { get; set; }
         
         // Cosa
         public int ThingId { get; set; }

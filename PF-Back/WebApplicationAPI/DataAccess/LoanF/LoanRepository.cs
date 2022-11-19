@@ -17,5 +17,11 @@ namespace WebApplicationAPI.DataAccess.LoanF
         {
             throw new NotImplementedException();
         }
+        public bool SetReturnDate(Loan loan) // Ver como hacer para que solo actualice la fecha
+        {
+            dbSet.Attach(loan);
+            var changedEntity = dbSet.Entry(loan).Property(l => l.ReturnDate).IsModified = true;
+            return changedEntity;
+        }
     }
 }

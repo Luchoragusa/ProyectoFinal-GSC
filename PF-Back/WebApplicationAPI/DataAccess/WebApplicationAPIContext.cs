@@ -11,12 +11,14 @@ namespace WebApplicationAPI.DataAccess
         }
 
         public DbSet<Category> Categories { get; set; }
-        public DbSet<Entities.Thing> Things { get; set; }
+        public DbSet<Thing> Things { get; set; }
         public DbSet<Person> Person { get; set; }
         public DbSet<Loan> Loans { get; set; }
 
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
+        
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
             //modelBuilder.Entity<Loan>()
             //    .HasOne(l => l.Person)
             //    .WithMany(p => p.Loans)
@@ -47,6 +49,6 @@ namespace WebApplicationAPI.DataAccess
             //        Phone = "123456789"
             //    }
             //);
-        //}
+        }
     }
 }

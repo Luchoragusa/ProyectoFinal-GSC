@@ -17,6 +17,7 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddDbContext<WebApplicationAPIContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("ThingsContextConnection"));
+    options.EnableSensitiveDataLogging(true);
 });
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();

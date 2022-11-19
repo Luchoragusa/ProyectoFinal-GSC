@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Entities
 {
+    [Table("Things")]
     public class Thing : EntityBase
     {
         public string Description { get; set; }
