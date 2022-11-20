@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebApplicationAPI.DataAccess;
 using Entities;
+using WebApplicationAPI.Helpers;
 
 namespace WebApplicationAPI.Controllers
 {
@@ -34,7 +35,7 @@ namespace WebApplicationAPI.Controllers
         }
 
         [HttpPost] // POST api/person
-        public IActionResult Create([FromBody] Person person)
+        public IActionResult Register([FromBody] Person person)
         {
             //Request validations
             if (person is null)
@@ -46,7 +47,14 @@ namespace WebApplicationAPI.Controllers
                 return BadRequest("Email is mandatory");
             if (string.IsNullOrWhiteSpace(person.Phone))
                 return BadRequest("Phone is mandatory");
+            if (string.IsNullOrWhiteSpace(person.User))
+                return BadRequest("User is mandatory");
+            if (string.IsNullOrWhiteSpace(person.Password))
+                return BadRequest("Password is mandatory");
 
+            person.Role = 2; // Default Role user
+            person.Password = Hash.HashPassword(person.Password);// Hash password
+            
             Person p_created = uow.PersonRepository.Insert(person);
 
             if (p_created == null)
@@ -74,6 +82,8 @@ namespace WebApplicationAPI.Controllers
                 band = true;
             if (!string.IsNullOrWhiteSpace(person.Phone))
                 band = true;
+            if (!string.IsNullOrWhiteSpace(person.User))
+                band = true;
             if (!band)
                 return BadRequest("At least one field must be filled");
 
@@ -88,7 +98,9 @@ namespace WebApplicationAPI.Controllers
                 p.Email = person.Email;
             if (p.Phone != person.Phone && !string.IsNullOrWhiteSpace(person.Phone))
                 p.Phone = person.Phone;
-            
+            if (p.User != person.User && !string.IsNullOrWhiteSpace(person.User))
+                p.User = person.User;
+
             uow.PersonRepository.Update(p);
             uow.Complete();
 
@@ -108,7 +120,7 @@ namespace WebApplicationAPI.Controllers
             List<Loan> loans = uow.LoanRepository.GetLoansForPerson(p);
 
             if (loans.Count > 0)
-                return BadRequest($"This person has {loans.Count} loans, it cannot be deleted",);
+                return BadRequest($"This person has {loans.Count} loans, it cannot be deleted");
 
             if (uow.PersonRepository.Delete(id))
             {

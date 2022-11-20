@@ -1,7 +1,5 @@
 using WebApplicationAPI.DataAccess;
 using Microsoft.EntityFrameworkCore;
-using Entities;
-using WebApplicationAPI.DataAccess.PersonF;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
