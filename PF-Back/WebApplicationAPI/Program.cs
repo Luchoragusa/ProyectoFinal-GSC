@@ -1,6 +1,11 @@
 using WebApplicationAPI.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using WebApplicationAPI.Configuration;
+using WebApplicationAPI.Handlres;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,9 +13,30 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 
 
-builder.Services.AddAuthorization();
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(o =>
+{
+    o.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidIssuer = builder.Configuration["Jwt:Issuer"], // Quien genera el token
+        ValidAudience = builder.Configuration["Jwt:Audience"], // Para quien es generado
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])), // Clave secreta
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = false,
+        ValidateIssuerSigningKey = true
+    };
+});
+
+builder.Services.AddAuthorization(); // Agregamos la autorización para poder usarla en los controladores
+builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("JWT"));
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IJwtHandler, JwtHandler>();
 
 builder.Services.AddDbContext<WebApplicationAPIContext>(options =>
 {
@@ -41,7 +67,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthorization();
+app.UseAuthentication(); // Veo que el usuario este logeado
+app.UseAuthorization(); // Una vez logeado, veo los permisos que tiene
 
 app.MapRazorPages();
 app.MapControllerRoute(

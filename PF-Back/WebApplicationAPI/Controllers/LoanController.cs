@@ -19,7 +19,7 @@ namespace WebApplicationAPI.Controllers
         {
             List<Loan> loans = uow.LoanRepository.GetAll();
             foreach (Loan loan in loans)
-                loan.Person = getPerson(loan.Id);
+                loan.Person = uow.PersonRepository.GetById(loan.Id);
             return Ok(loans.ToList());
         }
 
@@ -34,16 +34,8 @@ namespace WebApplicationAPI.Controllers
             if (loan == null)
                 return NotFound();
 
-            loan.Person = getPerson(loan.Id);
+            loan.Person = uow.PersonRepository.GetById(loan.Id);
             return Ok(loan);
-        }
-
-        private Person getPerson(int id)
-        {
-            Person person = uow.PersonRepository.GetById(id);
-            if (person == null)
-                return null;
-            return person;
         }
         
         [HttpPost] // POST api/loan

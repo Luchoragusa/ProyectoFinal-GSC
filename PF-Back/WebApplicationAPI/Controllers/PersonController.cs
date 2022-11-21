@@ -2,6 +2,7 @@
 using WebApplicationAPI.DataAccess;
 using Entities;
 using WebApplicationAPI.Helpers;
+using WebApplicationAPI.Dto;
 
 namespace WebApplicationAPI.Controllers
 {
@@ -18,6 +19,9 @@ namespace WebApplicationAPI.Controllers
         [HttpGet] // GetAll api/person
         public IActionResult GetAll()
         {
+            List<PersonDTO> persons = uow.PersonRepository.GetAll();
+            if (persons == null)
+                return NotFound("No persons found");
             return Ok(uow.PersonRepository.GetAll());
         }
 
@@ -27,7 +31,7 @@ namespace WebApplicationAPI.Controllers
             if (id == 0)
                 return BadRequest("ID is mandatory, must be an integer and must be greater than 0");
 
-            Person person = uow.PersonRepository.GetById(id);
+            PersonDTO person = uow.PersonRepository.GetByIdDTO(id);
             if (person == null)
                 return NotFound();
             
@@ -47,8 +51,6 @@ namespace WebApplicationAPI.Controllers
                 return BadRequest("Email is mandatory");
             if (string.IsNullOrWhiteSpace(person.Phone))
                 return BadRequest("Phone is mandatory");
-            if (string.IsNullOrWhiteSpace(person.User))
-                return BadRequest("User is mandatory");
             if (string.IsNullOrWhiteSpace(person.Password))
                 return BadRequest("Password is mandatory");
 
@@ -82,29 +84,35 @@ namespace WebApplicationAPI.Controllers
                 band = true;
             if (!string.IsNullOrWhiteSpace(person.Phone))
                 band = true;
-            if (!string.IsNullOrWhiteSpace(person.User))
-                band = true;
             if (!band)
                 return BadRequest("At least one field must be filled");
 
-            Person p = uow.PersonRepository.GetById(id);
+            PersonDTO p = uow.PersonRepository.GetByIdDTO(id);
             if (p == null)
                 return NotFound();
-            
+
             // Update fields if they are not null
             if (p.Name != person.Name && !string.IsNullOrWhiteSpace(person.Name))
                 p.Name = person.Name;
+            else
+                p.Name = null;
+            
             if (p.Email != person.Email && !string.IsNullOrWhiteSpace(person.Email))
                 p.Email = person.Email;
+            else
+                p.Email = null;
+            
             if (p.Phone != person.Phone && !string.IsNullOrWhiteSpace(person.Phone))
                 p.Phone = person.Phone;
-            if (p.User != person.User && !string.IsNullOrWhiteSpace(person.User))
-                p.User = person.User;
+            else
+                p.Phone = null;
 
-            uow.PersonRepository.Update(p);
+            Person person_updated = uow.PersonRepository.Update(p);
+            if (person_updated == null)
+                return BadRequest("Error updating person");
+
             uow.Complete();
-
-            return Ok(p);
+            return Ok();
         }
 
         [HttpDelete("{id}")] // Delete api/person/{id}
