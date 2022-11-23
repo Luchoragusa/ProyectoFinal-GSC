@@ -47,6 +47,7 @@ namespace WebApplicationAPI.Handlres
                 new Claim(ClaimTypes.Expiration, date)
             };
 
+
             return claims;
         }
         

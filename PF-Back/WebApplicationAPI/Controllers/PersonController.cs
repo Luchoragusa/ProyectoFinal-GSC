@@ -3,10 +3,13 @@ using WebApplicationAPI.DataAccess;
 using Entities;
 using WebApplicationAPI.Helpers;
 using WebApplicationAPI.Dto;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace WebApplicationAPI.Controllers
 {
     [Route("api/[controller]")]
+    [ApiController]
     public class PersonController : ControllerBase
     {
         private readonly IUnitOfWork uow;
@@ -17,6 +20,7 @@ namespace WebApplicationAPI.Controllers
         }
 
         [HttpGet] // GetAll api/person
+        [Authorize(Roles = "Admin", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)] 
         public IActionResult GetAll()
         {
             List<PersonDTO> persons = uow.PersonRepository.GetAll();
@@ -54,7 +58,7 @@ namespace WebApplicationAPI.Controllers
             if (string.IsNullOrWhiteSpace(person.Password))
                 return BadRequest("Password is mandatory");
 
-            person.Role = 2; // Default Role user
+            person.Role = "User"; // Default Role user
             person.Password = Hash.HashPassword(person.Password);// Hash password
             
             Person p_created = uow.PersonRepository.Insert(person);

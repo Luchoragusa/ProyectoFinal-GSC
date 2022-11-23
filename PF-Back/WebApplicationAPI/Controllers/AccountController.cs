@@ -38,7 +38,7 @@ namespace WebApplicationAPI.Controllers
             if (Hash.HashPassword(person.Password) != p.Password)
                 return NotFound("Email or password is incorrect");
 
-            Console.WriteLine("Login successfull");
+            Console.WriteLine("Login successfull as role:" + p.Role);
 
             var bearer = jwtHandler.GenerateToken(p);
             return Ok(new
