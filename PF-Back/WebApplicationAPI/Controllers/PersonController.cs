@@ -20,7 +20,7 @@ namespace WebApplicationAPI.Controllers
         }
 
         [HttpGet] // GetAll api/person
-        [Authorize(Roles = "Admin", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)] 
+        [Authorize(Roles = "Admin,User")] 
         public IActionResult GetAll()
         {
             List<PersonDTO> persons = uow.PersonRepository.GetAll();
@@ -30,6 +30,7 @@ namespace WebApplicationAPI.Controllers
         }
 
         [HttpGet("{id}")] // GetOne api/person/{id}
+        [Authorize(Roles = "Admin,User")]
         public IActionResult GetOne(int id)
         {
             if (id == 0)
@@ -43,6 +44,7 @@ namespace WebApplicationAPI.Controllers
         }
 
         [HttpPost] // POST api/person
+        [Authorize(Roles = "Admin")]
         public IActionResult Register([FromBody] Person person)
         {
             //Request validations
@@ -72,6 +74,7 @@ namespace WebApplicationAPI.Controllers
         }
 
         [HttpPut("{id}")] // PUT api/person/{id}
+        [Authorize(Roles = "Admin")]
         public IActionResult Update(int id, [FromBody] Person person)
         {
             //Request validations
@@ -120,6 +123,7 @@ namespace WebApplicationAPI.Controllers
         }
 
         [HttpDelete("{id}")] // Delete api/person/{id}
+        [Authorize(Roles = "Admin,User")]
         public IActionResult Delete(int id)
         {
             if (id == 0)

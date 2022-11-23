@@ -1,5 +1,7 @@
 ﻿using Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 using WebApplicationAPI.DataAccess;
 
 namespace WebApplicationAPI.Controllers
@@ -15,12 +17,14 @@ namespace WebApplicationAPI.Controllers
         }
 
         [HttpGet] // GetAll api/category
+        [Authorize(Roles = "Admin,User")]
         public IActionResult GetAll()
         {
             return Ok(uow.CategoryRepository.GetAll());
         }
 
         [HttpGet("{id}")] // GetOne api/category/{id}
+        [Authorize(Roles = "Admin,User")]
         public IActionResult GetOne(int id)
         {
             if (id == 0)
@@ -34,6 +38,7 @@ namespace WebApplicationAPI.Controllers
         }
 
         [HttpPost] // POST api/category
+        [Authorize(Roles = "Admin")]
         public IActionResult Create([FromBody] Category category)
         {
             //Request validations
@@ -56,6 +61,7 @@ namespace WebApplicationAPI.Controllers
         }
 
         [HttpPut("{id}")] // PUT api/category/{id}
+        [Authorize(Roles = "Admin")]
         public IActionResult Update(int id, [FromBody] Category category)
         {
             //Request validations
@@ -90,6 +96,7 @@ namespace WebApplicationAPI.Controllers
         }
 
         [HttpDelete("{id}")] // Delete api/category/{id}
+        [Authorize(Roles = "Admin")]
         public IActionResult Delete(int id)
         {
             if (id == 0)

@@ -1,5 +1,7 @@
 ﻿using Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 using WebApplicationAPI.DataAccess;
 
 namespace WebApplicationAPI.Controllers
@@ -15,6 +17,7 @@ namespace WebApplicationAPI.Controllers
         }
 
         [HttpGet] // GetAll api/loan
+        [Authorize(Roles = "Admin,User")]
         public IActionResult GetAll()
         {
             List<Loan> loans = uow.LoanRepository.GetAll();
@@ -24,6 +27,7 @@ namespace WebApplicationAPI.Controllers
         }
 
         [HttpGet("{id}")] // GetOne api/loan/{id}
+        [Authorize(Roles = "Admin,User")]
         public IActionResult GetOne(int id)
         {
             if (id == 0)
@@ -39,6 +43,7 @@ namespace WebApplicationAPI.Controllers
         }
         
         [HttpPost] // POST api/loan
+        [Authorize(Roles = "Admin")]
         public IActionResult Create([FromBody] Loan loan)
         {
             //Request validations
@@ -71,6 +76,7 @@ namespace WebApplicationAPI.Controllers
         }
 
         [HttpDelete("{id}")] // Delete api/loan/{id}
+        [Authorize(Roles = "Admin")]
         public IActionResult Delete(int id)
         {
             if (id == 0)
@@ -84,6 +90,7 @@ namespace WebApplicationAPI.Controllers
         }
 
         [HttpPut("{id}/setreturndate")] // SetReturnDate api/loan/{id}/setreturndate
+        [Authorize(Roles = "Admin,User")]
         public IActionResult SetReturnDate(int id, [FromBody] Loan loan)
         {
             if (id == 0)
