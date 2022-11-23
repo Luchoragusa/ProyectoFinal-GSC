@@ -9,6 +9,14 @@ namespace WebApplicationAPI.Controllers
     [Route("api/[controller]")]
     public class CategoryController : ControllerBase
     {
+
+        // ========== UnitTest ================
+
+
+        // ====================================
+
+
+
         private readonly IUnitOfWork uow;
 
         public CategoryController(IUnitOfWork uow)
