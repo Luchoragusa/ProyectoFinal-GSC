@@ -25,7 +25,7 @@ namespace WebApplicationAPI.DataAccess.PersonF
                 Role = x.Role
             }).ToList();
         }
-        public new PersonDTO GetByIdDTO(int id)
+        public PersonDTO GetByIdDTO(int id)
         {
             return context.Person.Where(x => x.Id == id).Select(x => new PersonDTO
             {

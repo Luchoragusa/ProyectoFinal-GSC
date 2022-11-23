@@ -7,5 +7,9 @@ namespace WebApplicationAPI.DataAccess.CategoryF
         public CategoryRepository(WebApplicationAPIContext context) : base(context)
         {
         }
+        public Category GetByDescrpition(string description)
+        {
+            return context.Categories.FirstOrDefault(c => c.Description == description);
+        }
     }
 }

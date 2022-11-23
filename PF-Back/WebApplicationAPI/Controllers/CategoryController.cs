@@ -48,8 +48,10 @@ namespace WebApplicationAPI.Controllers
             if (string.IsNullOrWhiteSpace(category.Description))
                 return BadRequest("Description is mandatory");
 
-            category.CreationDate = DateTime.Now;
+            if (uow.CategoryRepository.GetByDescrpition(category.Description) != null)
+                return BadRequest("Category already exists");
 
+            category.CreationDate = DateTime.Now;
             Category c_created = uow.CategoryRepository.Insert(category);
 
             if (c_created == null)
