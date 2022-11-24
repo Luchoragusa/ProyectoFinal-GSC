@@ -7,7 +7,7 @@ namespace WebApplicationAPI.DataAccess
     {
         public WebApplicationAPIContext(DbContextOptions<WebApplicationAPIContext> options) : base(options)
         {
-            Database.EnsureCreated();
+            // Database.EnsureCreated();
         }
 
         public DbSet<Category> Categories { get; set; }

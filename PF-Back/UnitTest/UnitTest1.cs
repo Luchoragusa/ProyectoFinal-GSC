@@ -13,24 +13,17 @@ namespace UnitTest
     public class UnitTest1
     {
         private CategoryController target;
-
-        private Mock<ICategoryRepository> mockForecast;
-
+        private Mock<IUnitOfWork> mockUow;
+        
         [TestInitialize]
         public void Init()
         {
-            mockForecast = new Mock<ICategoryRepository>();
+            mockUow = new Mock<IUnitOfWork>();
 
+            mockUow.Setup(x => x.CategoryRepository).Returns(Mock.Of<ICategoryRepository>());
+            // mockUow.Setup(x => x.CategoryRepository.GetAll()).Returns(new List<Category>());
 
-            target = new CategoryController(
-                new UnitOfWork(
-                    new WebApplicationAPIContext(
-                        new DbContextOptionsBuilder<WebApplicationAPIContext>()
-                        .UseInMemoryDatabase("WebApplicationAPIContext")
-                            .Options
-                    )
-                )
-            );
+            target = new CategoryController(mockUow.Object);
         }
 
         [TestMethod]
