@@ -1,11 +1,19 @@
+using Microsoft.EntityFrameworkCore;
+using WebApplicationMVC.DataAccess;
+using WebApplicationMVC.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
 
+builder.Services.AddScoped<IThingService, ThingService>();
 
-
+builder.Services.AddDbContext<MVC_Context>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("ThingsContextConnection"));
+});
 
 var app = builder.Build();
 // Configure the HTTP request pipeline.

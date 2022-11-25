@@ -11,12 +11,11 @@ namespace Entities
     public class Thing : EntityBase
     {
         public string Description { get; set; }
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime CreationDate { get; set; }
-        public IList<Loan> Loans { get; set; }
+        //public IList<Loan> Loans { get; set; }
         // Category
         public int CategoryId { get; set; }
-        public Category Category { get; set; }
+        //public Category Category { get; set; }
         
     }
 }
