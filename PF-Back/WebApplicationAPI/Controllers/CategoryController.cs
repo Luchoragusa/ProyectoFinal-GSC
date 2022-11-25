@@ -59,7 +59,7 @@ namespace WebApplicationAPI.Controllers
             if (uow.CategoryRepository.GetByDescrpition(category.Description) != null)
                 return BadRequest("Category already exists");
 
-            category.CreationDate = DateTime.Now;
+            category.CreationDate = DateTime.UtcNow;
             Category c_created = uow.CategoryRepository.Insert(category);
 
             if (c_created == null)

@@ -62,7 +62,7 @@ namespace WebApplicationAPI.Controllers
             //if (uow.ThingRepository.GetById(loan.ThingId) == null)
             //    return NotFound("Thing not exist");
 
-            loan.LoanDate = DateTime.Now;
+            loan.LoanDate = DateTime.UtcNow;
             loan.ReturnDate = null;
 
             Loan l_created = uow.LoanRepository.Insert(loan);
