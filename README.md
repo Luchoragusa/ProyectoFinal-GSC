@@ -11,4 +11,5 @@
 
 ## Documentacion
 
-Postman: https://documenter.getpostman.com/view/23041568/2s8Ysuvs1Z
+  - Postman: https://documenter.getpostman.com/view/23041568/2s8Ysuvs1Z
+  - DER: https://prnt.sc/dp5oyA7iKSdl
