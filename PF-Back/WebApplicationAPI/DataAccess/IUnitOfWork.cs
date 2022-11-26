@@ -8,7 +8,7 @@ namespace WebApplicationAPI.DataAccess
     {
         PersonRepository PersonRepository { get; }
         LoanRepository LoanRepository { get; }
-        CategoryRepository CategoryRepository { get; }
+        ICategoryRepository CategoryRepository { get; }
         int Complete();
     }
 }

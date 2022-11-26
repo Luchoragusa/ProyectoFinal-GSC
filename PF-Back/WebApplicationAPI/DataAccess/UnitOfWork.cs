@@ -17,9 +17,9 @@ namespace WebApplicationAPI.DataAccess
         
         public PersonRepository PersonRepository { get; }
         public LoanRepository LoanRepository { get; }
-        public CategoryRepository CategoryRepository { get; }
+        public ICategoryRepository CategoryRepository { get; }
 
-
+        
         public int Complete()
         {
             return _context.SaveChanges();
