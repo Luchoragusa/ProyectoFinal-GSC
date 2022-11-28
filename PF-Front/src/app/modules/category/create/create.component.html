@@ -1,0 +1,31 @@
+
+    <h1 mat-dialog-title>Create Category</h1>
+
+    <div mat-dialog-content class="dialog">
+    
+        <form [formGroup]="categoryForm">
+
+            <div class="Box">
+                <mat-form-field appearance="fill">
+                <mat-label>Description</mat-label>
+                <input matInput placeholder="Informatica" formControlName = "description">
+                <!-- <mat-error *ngIf="email.invalid">{{ getErrorMessage() }}</mat-error> -->
+                </mat-form-field>
+            </div>
+    
+                <mat-form-field appearance="fill">
+                    <mat-label>Choose a date</mat-label>
+                    <input matInput [matDatepicker]="picker" formControlName = "creationDate" readonly>
+                    <mat-hint>MM/DD/YYYY</mat-hint>
+                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+        </form>
+    
+    </div>
+
+    <div mat-dialog-actions [align]="'end'">
+        <button mat-raised-button color="warn" mat-dialog-close>Close</button>
+        <button mat-raised-button color="primary" (click)="createCategory()" [mat-dialog-close]="true" cdkFocusInitial>Save</button>
+    </div>
+
