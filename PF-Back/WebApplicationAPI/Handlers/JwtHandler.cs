@@ -18,48 +18,22 @@ namespace WebApplicationAPI.Handlres
             _jwtOptions = jwtOptions?.Value ?? throw new ArgumentException(nameof(jwtOptions));
         }
         
-        public string GenerateToken(Person user)
+        public string GenerateToken(Person person)
         {
-            var signingCredentials = GetSigningCredentials();
-            var claims = GetClaims(user);
-            var tokenOptions = GenerateTokenOptions(signingCredentials, claims);
-            var token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-
-            return token;
-        }
-        public SigningCredentials GetSigningCredentials()
-        {
-
-            var key = Encoding.UTF8.GetBytes(_jwtOptions.Key); //Esto debe ser configurable por ambiente. Secret Manager podria ser una solucion https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-6.0&tabs=windows 
-            var secret = new SymmetricSecurityKey(key);
-
-            return new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
-        }
-        
-        public List<Claim> GetClaims(Person user)
-        {
-            string date = DateTime.Now.AddHours(1).ToString("yyyy-MM-dd-HH-mm-ss");
-
-            var claims = new List<Claim>
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_jwtOptions.Key);
+            var tokenDescriptor = new SecurityTokenDescriptor
             {
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Role, user.Role.ToString()),
-                new Claim(ClaimTypes.Expiration, date)
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Email, person.Email),
+                    new Claim(ClaimTypes.Role, person.Role.ToString()),
+                }),
+                Expires = DateTime.UtcNow.AddHours(1),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
-
-
-            return claims;
-        }
-        
-        public JwtSecurityToken GenerateTokenOptions(SigningCredentials signingCredentials, List<Claim> claims)
-        {
-            var tokenOptions = new JwtSecurityToken(
-                claims: claims,
-                issuer: _jwtOptions.Issuer,
-                audience: _jwtOptions.Audience,
-                signingCredentials: signingCredentials);
-
-            return tokenOptions;
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
         }
     }
 }
