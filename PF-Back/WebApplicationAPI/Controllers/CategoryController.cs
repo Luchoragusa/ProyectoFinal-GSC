@@ -1,6 +1,7 @@
 ﻿using Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using System.Data;
 using WebApplicationAPI.DataAccess;
 
@@ -9,14 +10,6 @@ namespace WebApplicationAPI.Controllers
     [Route("api/[controller]")]
     public class CategoryController : ControllerBase
     {
-
-        // ========== UnitTest ================
-
-
-        // ====================================
-
-
-
         private readonly IUnitOfWork uow;
 
         public CategoryController(IUnitOfWork uow)
@@ -31,14 +24,28 @@ namespace WebApplicationAPI.Controllers
             return Ok(uow.CategoryRepository.GetAll());
         }
 
-        [HttpGet("{id}")] // GetOne api/category/{id}
-        [Authorize(Roles = "Admin,User")]
+        //[HttpGet("{id}")] // GetOne api/category/{id}
+        //[Authorize(Roles = "Admin,User")]
         public IActionResult GetOne(int id)
         {
             if (id == 0)
                 return BadRequest("ID is mandatory, must be an integer and must be greater than 0");
 
             Category category = uow.CategoryRepository.GetById(id);
+            if (category == null)
+                return NotFound();
+
+            return Ok(category);
+        }
+
+        [HttpGet("{description}")] // GetOne api/category/{description}
+        [Authorize(Roles = "Admin,User")]
+        public IActionResult GetOneByDescription(string description)
+        {
+            if (description.IsNullOrEmpty())
+                return BadRequest("Description is mandatory");
+
+            Category category = uow.CategoryRepository.GetByDescrpition(description);
             if (category == null)
                 return NotFound();
 
