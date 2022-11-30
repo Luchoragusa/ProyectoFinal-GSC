@@ -9,8 +9,4 @@ import { Person } from '../interfaces/person';
 export class UserService {
 
   constructor(private _http: HttpClient) { }
-
-  login(person: any){
-    return this._http.post(environment.url + 'account/login', person);
-  }
 }

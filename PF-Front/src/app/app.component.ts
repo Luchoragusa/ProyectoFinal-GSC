@@ -7,4 +7,13 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'PF-Front';
+
+  getToken() {  
+  if( localStorage.getItem('token') != null ) { 
+    return true;
+  }
+  else {
+    return false;
+  }}
+
 }

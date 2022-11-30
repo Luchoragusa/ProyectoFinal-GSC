@@ -3,9 +3,9 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Person } from 'src/app/interfaces/person';
-import { UserService } from 'src/app/services/user.service';
 import { AlertDialogComponent } from '../shared/alert-dialog/alert-dialog.component';
 import jwt_decode from 'jwt-decode';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private _router: Router,
     public dialog: MatDialog,
-    private uS: UserService
+    private aS: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -44,10 +44,11 @@ export class LoginComponent implements OnInit {
         password: this.form.value.password,
       };
 
-      this.uS.login(user).subscribe({
+      this.aS.login(user).subscribe({
         next:(response: any) => {
           localStorage.setItem('token', response.token);
           const decodedToken = this.getDecodedAccessToken(response.token);
+          localStorage.setItem('email', decodedToken.email);
           localStorage.setItem('role', decodedToken.role);
           this._router.navigate(['/home']);
         },

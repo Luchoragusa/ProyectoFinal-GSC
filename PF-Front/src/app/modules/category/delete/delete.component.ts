@@ -21,7 +21,6 @@ export class DeleteComponent implements OnInit {
 
   deleteCategory(){
     this.cS.deleteCategory(this.data).subscribe((response: any) => {
-      console.log(response);
     });
   }
 }

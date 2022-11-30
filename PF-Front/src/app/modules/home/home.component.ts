@@ -7,6 +7,7 @@ import { MatSort } from '@angular/material/sort';
 import { EditComponent } from 'src/app/modules/category/edit/edit.component';
 import { MatDialog } from '@angular/material/dialog';
 import { DeleteComponent } from '../category/delete/delete.component';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -15,8 +16,7 @@ import { DeleteComponent } from '../category/delete/delete.component';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private cS:CategoryService, private dialog: MatDialog) {
-   }
+  constructor(private cS:CategoryService, private dialog: MatDialog, private _authService:AuthService) {}
 
   displayedColumns: string[] = ['id', 'description', 'creationDate', 'actions'];
   dataSource !: MatTableDataSource<Category>;
@@ -63,11 +63,6 @@ export class HomeComponent implements OnInit {
   }
 
   checkRole() {
-    console.log(localStorage.getItem('role'));
-    if (localStorage.getItem('role') == "Admin") {
-      return false;
-    } else {
-      return true;
-    }
+    return !this._authService.checkIsAdmin();
   }
 }

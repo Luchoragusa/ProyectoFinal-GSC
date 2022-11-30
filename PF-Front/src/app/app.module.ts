@@ -4,8 +4,8 @@ import { BrowserModule } from '@angular/platform-browser';
 // import components
 
 import { AppComponent } from './app.component';
-import { HeaderComponent } from './modules/header/header.component';
-import { FooterComponent } from './modules/footer/footer.component';
+import { HeaderComponent } from './modules/shared/header/header.component';
+import { FooterComponent } from './modules/shared/footer/footer.component';
 import { HomeComponent } from './modules/home/home.component';
 import { LoginComponent } from './modules/login/login.component';
 import {EditComponent} from './modules/category/edit/edit.component' 
@@ -27,8 +27,10 @@ import {MatNativeDateModule} from '@angular/material/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DeleteComponent } from './modules/category/delete/delete.component';
 import { CreateComponent } from './modules/category/create/create.component';
-import { ErrorComponent } from './modules/category/error/error.component';
 import { TokenInterceptorService } from './services/token-interceptor.service';
+import { AlertDialogComponent } from './modules/shared/alert-dialog/alert-dialog.component';
+import { LogoutComponent } from './modules/logout/logout.component';
+import { NotfoundComponent } from './modules/shared/notfound/notfound.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +42,9 @@ import { TokenInterceptorService } from './services/token-interceptor.service';
     EditComponent,
     DeleteComponent,
     CreateComponent,
-    ErrorComponent
+    AlertDialogComponent,
+    LogoutComponent,
+    NotfoundComponent
   ],
   imports: [
     BrowserModule,
@@ -56,7 +60,7 @@ import { TokenInterceptorService } from './services/token-interceptor.service';
     MatTableModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    FormsModule, 
+    FormsModule,
     ReactiveFormsModule,
     MatButtonModule
   ],

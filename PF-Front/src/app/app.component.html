@@ -1,7 +1,9 @@
 <main>  
     
-  <header>  
-      <app-header></app-header>
+  <header>
+    <ng-container *ngIf="getToken()">
+        <app-header></app-header>
+    </ng-container>
   </header>
   
   <section class="body">
