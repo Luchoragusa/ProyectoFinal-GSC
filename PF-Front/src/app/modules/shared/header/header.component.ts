@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { AuthService } from 'src/app/services/auth.service';
 import { CreateComponent } from '../../category/create/create.component';
 import { LogoutComponent } from '../../logout/logout.component';
 
@@ -10,7 +11,7 @@ import { LogoutComponent } from '../../logout/logout.component';
 })
 export class HeaderComponent implements OnInit {
 
-  constructor(private dialog: MatDialog) { }
+  constructor(private dialog: MatDialog, private _authService:AuthService) { }
   ngOnInit(): void {
   }
 
@@ -23,11 +24,6 @@ export class HeaderComponent implements OnInit {
   }
 
   checkRole() {
-    console.log(localStorage.getItem('role'));
-    if (localStorage.getItem('role') == "Admin") {
-      return true;
-    } else {
-      return false;
-    }
+    return this._authService.checkIsAdmin();
   }
 }
