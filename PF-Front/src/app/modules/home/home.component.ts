@@ -25,12 +25,9 @@ export class HomeComponent implements OnInit {
   @ViewChild(MatSort) sort!: MatSort;
 
   ngOnInit(): void {
-    console.log("Hola! 1");
     this.getCategories();
   }
-
   response: any;
-
   getCategories() {
     this.cS.getApiCategories().subscribe((categories: Category[]) => {
 
@@ -64,5 +61,13 @@ export class HomeComponent implements OnInit {
       this.getCategories();
     });
   }
-  
+
+  checkRole() {
+    console.log(localStorage.getItem('role'));
+    if (localStorage.getItem('role') == "Admin") {
+      return false;
+    } else {
+      return true;
+    }
+  }
 }

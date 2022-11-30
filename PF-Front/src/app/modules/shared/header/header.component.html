@@ -7,9 +7,11 @@
 
   <span class="example-spacer"></span>
 
-  <button mat-icon-button (click)="createCategory()">
-    <mat-icon>add_circle_outline</mat-icon>
-  </button>
+  <ng-container *ngIf=checkRole()>
+    <button mat-icon-button (click)="createCategory()">
+      <mat-icon>add_circle_outline</mat-icon>
+    </button>
+  </ng-container>
 
   <button mat-icon-button (click)="logout()" routerLink="">
     <mat-icon>account_circle </mat-icon>

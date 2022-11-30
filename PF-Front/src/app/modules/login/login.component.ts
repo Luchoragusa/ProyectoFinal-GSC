@@ -4,6 +4,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Person } from 'src/app/interfaces/person';
 import { UserService } from 'src/app/services/user.service';
+import { AlertDialogComponent } from '../shared/alert-dialog/alert-dialog.component';
+import jwt_decode from 'jwt-decode';
 
 @Component({
   selector: 'app-login',
@@ -45,13 +47,27 @@ export class LoginComponent implements OnInit {
       this.uS.login(user).subscribe({
         next:(response: any) => {
           localStorage.setItem('token', response.token);
+          const decodedToken = this.getDecodedAccessToken(response.token);
+          localStorage.setItem('role', decodedToken.role);
           this._router.navigate(['/home']);
         },
         error:(err) => {
-            alert('Invalid credentials');
-            this.form.reset();
+          this.dialog.open(AlertDialogComponent, {
+            data: {
+              title: 'Failed to login',
+              message: 'Email or password incorrect'
+            }
+          })
         }
       });
+    }
+  }
+
+  getDecodedAccessToken(token: string): any {
+    try {
+      return jwt_decode(token);
+    } catch(Error) {
+      return null;
     }
   }
 }

@@ -3,7 +3,7 @@ import {FormControl, FormGroup, FormBuilder, Validators} from '@angular/forms';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Category } from 'src/app/interfaces/category';
 import { CategoryService } from 'src/app/services/category.service';
-import { ErrorComponent } from '../error/error.component';
+import { AlertDialogComponent } from '../../shared/alert-dialog/alert-dialog.component';
 
 @Component({
   selector: 'app-edit',
@@ -32,7 +32,12 @@ export class EditComponent implements OnInit {
     this.cS.getOneCategory(this.categoryForm.value.description).subscribe({
       next: (category: Category) => { // this category aleady exists
         if (category.id != this.categoryForm.value.id) {
-          this.dialog.open(ErrorComponent);
+          this.dialog.open(AlertDialogComponent, {
+            data: {
+              title: 'Error editing category',
+              message: 'This category already exists'
+            }
+          })
         } else
         this.cS.editCategory(this.categoryForm.value).subscribe((response: any) => {});
       },

@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Category } from 'src/app/interfaces/category';
 import { CategoryService } from 'src/app/services/category.service';
-import { ErrorComponent } from '../error/error.component';
+import { AlertDialogComponent } from '../../shared/alert-dialog/alert-dialog.component';
 
 @Component({
   selector: 'app-create',
@@ -31,7 +31,12 @@ export class CreateComponent implements OnInit {
   createCategory(){
     this.cS.getOneCategory(this.categoryForm.value.description).subscribe({
       next: (category: Category) => { // this category aleady exists
-        this.dialog.open(ErrorComponent);
+        this.dialog.open(AlertDialogComponent, {
+          data: {
+            title: 'Error creating category',
+            message: 'This category already exists'
+          }
+        })
       },
     error: (err) => { // this category does not exist
       this.cS.createCategory(this.categoryForm.value).subscribe((response: any) => {

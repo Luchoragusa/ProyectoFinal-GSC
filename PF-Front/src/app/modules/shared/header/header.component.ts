@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateComponent } from '../../category/create/create.component';
+import { LogoutComponent } from '../../logout/logout.component';
 
 @Component({
   selector: 'app-header',
@@ -10,7 +11,6 @@ import { CreateComponent } from '../../category/create/create.component';
 export class HeaderComponent implements OnInit {
 
   constructor(private dialog: MatDialog) { }
-
   ngOnInit(): void {
   }
 
@@ -19,6 +19,15 @@ export class HeaderComponent implements OnInit {
   }
 
   logout(){
-    localStorage.removeItem('token');
+    this.dialog.open(LogoutComponent)
+  }
+
+  checkRole() {
+    console.log(localStorage.getItem('role'));
+    if (localStorage.getItem('role') == "Admin") {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
